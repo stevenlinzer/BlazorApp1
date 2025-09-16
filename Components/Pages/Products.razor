@@ -1,0 +1,46 @@
+﻿@page "/products"
+@attribute [StreamRendering]
+@using BlazorApp1.Components.Data;
+
+<PageTitle>Products</PageTitle>
+
+<h1>Products</h1>
+
+<p>This page shows our menu of quality products.</p>
+
+@if (productDescriptions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th aria-label="Temperature in Farenheit">Product</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var productDesription in productDescriptions)
+            {
+                <tr>
+                    <td>@productDesription.Name</td>
+                    <td>@productDesription.Price.ToString("C2")/@productDesription.Unit</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ProductDescription[]? productDescriptions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate streaming rendering
+        await Task.Delay(500);
+
+        productDescriptions = ProductDescription.GetProductDescriptions().ToArray();
+    }
+}

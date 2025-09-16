@@ -1,0 +1,50 @@
+﻿@page "/order"
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+@using BlazorApp1.Components.Data;
+
+<PageTitle>Order</PageTitle>
+
+<h1>Order</h1>
+<form action="/api/orders/Order" method="post">
+    <label for="id">Id</label>
+    <input id="id" type="text" />
+    <label for="value">Value</label>
+    <input id="value" type="text" />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    public List<SelectListItem> Products = new List<SelectListItem>(); // Dropdown items
+    public SelectListItem? SelectedProductId { get; set; }
+    private int currentCount = 0;
+
+    private void ShowSelected()
+    {
+        if (SelectedProductId != null) {
+            System.Console.WriteLine("Selected " + SelectedProductId.id);
+        } else {
+            System.Console.WriteLine("Product has not been selected.");
+        }
+    }
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate streaming rendering
+        await Task.Delay(250);
+
+        ProductDescription.GetProductDescriptions().ForEach(ProductDescription => {
+            SelectListItem selectListItem = new SelectListItem();
+            selectListItem.id = ProductDescription.Id;
+            selectListItem.value = ProductDescription.Name;
+            Products.Add(selectListItem);
+        });
+        System.Console.WriteLine("Products Loaded " + Products.Count);
+    }
+}
