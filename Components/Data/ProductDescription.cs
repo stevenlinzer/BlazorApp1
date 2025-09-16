@@ -8,6 +8,7 @@ namespace BlazorApp1.Components.Data
         public double Price { get; set; }
         public string? Unit { get; set; }
         public string? Name { get; set; }
+        public string? Ingredients { get; set; }
 
         public static List<ProductDescription> GetProductDescriptions()
         {
